@@ -20,7 +20,7 @@ export const authenticate = async (email: string) => {
 
     const token = randomBytes(32).toString("hex");
 
-    const url = Meteor.absoluteUrl();
+    const url = Meteor.settings.public.URL as string;
 
     if (!user) {
       const userId = await UsersCollection.insertAsync({
