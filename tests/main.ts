@@ -1,5 +1,4 @@
-import { Meteor } from "meteor/meteor";
-import assert from "assert";
+
 import { getUserWithAuthToken, updateUserRole } from "/functions/user";
 import { AuthTokenCollection, UsersCollection } from "/imports/api/collections";
 import { expect } from "chai";
@@ -119,7 +118,7 @@ describe("getUserWithAuthToken", () => {
 
       const err = error as Error;
       expect(err.message).to.equal(
-        "User not found [loginWithAuthToken.userNotFound]"
+        "User not found [loginWithAuthToken.userNotFound] [getUserWithAuthToken.failed]"
       );
     }
 
@@ -135,7 +134,7 @@ describe("getUserWithAuthToken", () => {
     await AuthTokenCollection.insertAsync({
       token,
       userId,
-      createdAt: new Date(Date.now() - 60 * 60 * 1000 * 24 - 1),
+      createdAt: new Date(0),
     });
     await UsersCollection.insertAsync({
       _id: userId,
@@ -171,7 +170,7 @@ describe("getUserWithAuthToken", () => {
     } catch (error) {
       // Assert that the error message is correct
       const err = error as Error;
-      expect(err.message).to.equal("Find failed");
+      expect(err.message).to.equal("Find failed [getUserWithAuthToken.failed]");
     }
   });
 
