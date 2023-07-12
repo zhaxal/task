@@ -1,12 +1,13 @@
 import { Meteor } from "meteor/meteor";
 import { authenticate } from "/functions/auth";
 import { check } from "meteor/check";
-import { MAIL_URL } from "/secret/mailgun";
+
 import { getUserWithAuthToken, updateUserRole } from "/functions/user";
 import { Role } from "/models/user";
 
 Meteor.startup(async () => {
-  process.env.MAIL_URL = MAIL_URL;
+  process.env.MAIL_URL = Meteor.settings.public.MAIL_URL;
+
   Meteor.methods({
     getUserWithAuthToken(token) {
       check(token, String);

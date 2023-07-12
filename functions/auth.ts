@@ -5,12 +5,11 @@ import {
 } from "../imports/api/collections";
 import { Email } from "meteor/email";
 import { Meteor } from "meteor/meteor";
-import { FROM } from "/secret/mailgun";
 
 const sendEmailWithToken = (email: string, token: string) =>
   Email.sendAsync({
     to: email,
-    from: FROM,
+    from: Meteor.settings.public.MAIL_FROM,
     subject: "Your login link for Meteor Task app",
     text: `Hello,\n\nClick the link below to login:\n\n${Meteor.absoluteUrl(
       `login/${token}`
@@ -63,5 +62,3 @@ export const authenticate = async (email: string) => {
     throw new Meteor.Error("authenticate.failed", err.message);
   }
 };
-
-
