@@ -6,14 +6,12 @@ import {
 import { Email } from "meteor/email";
 import { Meteor } from "meteor/meteor";
 
-const sendEmailWithToken = (email: string, token: string) =>
+const sendEmailWithToken = (email: string, token: string, url: string) =>
   Email.sendAsync({
     to: email,
     from: Meteor.settings.public.FROM_MAIL,
     subject: "Your login link for Meteor Task app",
-    text: `Hello,\n\nClick the link below to login:\n\n${Meteor.absoluteUrl(
-      `login/${token}`
-    )}`,
+    text: `Hello,\n\nClick the link below to login:\n\n${url}login/${token}`,
   });
 
 export const authenticate = async (email: string) => {
@@ -21,6 +19,8 @@ export const authenticate = async (email: string) => {
     const user = await UsersCollection.findOneAsync({ email });
 
     const token = randomBytes(32).toString("hex");
+
+    const url = Meteor.absoluteUrl();
 
     if (!user) {
       const userId = await UsersCollection.insertAsync({
@@ -35,7 +35,7 @@ export const authenticate = async (email: string) => {
         token,
       });
 
-      await sendEmailWithToken(email, token);
+      await sendEmailWithToken(email, token, url);
     } else {
       if (!user._id) {
         throw new Meteor.Error(
@@ -55,11 +55,11 @@ export const authenticate = async (email: string) => {
         }
       );
 
-      await sendEmailWithToken(email, token);
+      await sendEmailWithToken(email, token, url);
     }
   } catch (error) {
     const err = error as Error;
-    console.log(Meteor.absoluteUrl(`login/`));
+
     throw new Meteor.Error("authenticate.failed", err.message);
   }
 };
