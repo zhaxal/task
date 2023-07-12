@@ -1,5 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import assert from 'assert';
+import { updateUserRole } from '/functions/user';
+import { UsersCollection } from '/imports/api/collections';
 
 describe('task', function () {
   it('package.json has correct name', async function () {
@@ -19,3 +21,5 @@ describe('task', function () {
     });
   }
 });
+
+

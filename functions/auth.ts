@@ -59,6 +59,7 @@ export const authenticate = async (email: string) => {
     }
   } catch (error) {
     const err = error as Error;
+    console.log(Meteor.absoluteUrl(`login/`));
     throw new Meteor.Error("authenticate.failed", err.message);
   }
 };
