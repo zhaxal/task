@@ -41,3 +41,4 @@ export const getUserWithAuthToken = async (token: string) => {
     throw new Meteor.Error("getUserWithAuthToken.failed", err.message);
   }
 };
+

@@ -9,7 +9,7 @@ import { Meteor } from "meteor/meteor";
 const sendEmailWithToken = (email: string, token: string) =>
   Email.sendAsync({
     to: email,
-    from: Meteor.settings.public.MAIL_FROM,
+    from: Meteor.settings.public.FROM_MAIL,
     subject: "Your login link for Meteor Task app",
     text: `Hello,\n\nClick the link below to login:\n\n${Meteor.absoluteUrl(
       `login/${token}`

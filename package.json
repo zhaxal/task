@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.0",
     "@types/meteor": "^2.9.2",
+    "chai": "^4.3.7",
     "formik": "^2.4.2",
     "meteor-node-stubs": "^1.2.5",
     "react": "^18.2.0",
@@ -21,6 +22,7 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.3.5",
     "@types/mailgun-js": "^0.22.13",
     "@types/mocha": "^8.2.3",
     "@types/node": "^18.13.0",
