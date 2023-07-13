@@ -11,7 +11,7 @@ const sendEmailWithToken = (email: string, token: string, url: string) =>
     to: email,
     from: Meteor.settings.public.FROM_MAIL,
     subject: "Your login link for Meteor Task app",
-    text: `Hello,\n\nClick the link below to login:\n\n${url}login/${token}`,
+    text: `Hello,\n\nClick the link below to login:\n\n${url}login?token=${token}`,
   });
 
 export const authenticate = async (email: string) => {

@@ -26,15 +26,14 @@ const RolePicker: FC = () => {
 
   const handleUpdate = () =>
     user
-      ? Meteor.callAsync("updateUserRole", user.email, role).then(
-          (err: Meteor.Error) => {
-            if (err) openSnackbar("error", err.reason as string);
-            else {
-              openSnackbar("success", "Role is updated");
-              updateUser();
-            }
-          }
-        )
+      ? Meteor.callAsync("updateUserRole", user.email, role)
+          .then(() => {
+            openSnackbar("success", "Role is updated");
+            updateUser();
+          })
+          .catch((err: Meteor.Error) => {
+            openSnackbar("error", err.reason as string);
+          })
       : null;
 
   return (

@@ -7,19 +7,51 @@ import { SnackbarProvider } from "/contexts/snackbar-context";
 import { AuthProvider } from "/contexts/auth-context";
 import Navbar from "/components/Navbar";
 import ProtectedRoute from "/components/ProtectedRoute";
+import Order from "/components/order-page-components/Order";
+import Offer from "/components/offer-page-components/Offer";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <ProtectedRoute>
-        <Home />
-      </ProtectedRoute>
+      <>
+        <Navbar />
+        <ProtectedRoute>
+          <Home />
+        </ProtectedRoute>
+      </>
+    ),
+  },
+  {
+    path: "/offer/:offerId",
+    element: (
+      <>
+        <Navbar />
+        <ProtectedRoute>
+          <Offer />
+        </ProtectedRoute>
+      </>
+    ),
+  },
+  {
+    path: "/order/:orderId",
+    element: (
+      <>
+        <Navbar />
+        <ProtectedRoute>
+          <Order />
+        </ProtectedRoute>
+      </>
     ),
   },
   {
     path: "/login",
-    element: <Login />,
+    element: (
+      <>
+        <Navbar />
+        <Login />
+      </>
+    ),
   },
 ]);
 
@@ -40,7 +72,6 @@ export const App = () => {
         <CssBaseline />
         <SnackbarProvider>
           <AuthProvider>
-            <Navbar />
             <RouterProvider router={router} />
           </AuthProvider>
         </SnackbarProvider>

@@ -9,14 +9,17 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import React, { FC } from "react";
-import { useDisclosure } from "/hooks/disclosure";
+import { useDisclosure, useDisclosureMenu } from "/hooks/disclosure";
 import { useFormik } from "formik";
 import { object, string } from "yup";
 import { useAuth } from "/contexts/auth-context";
 import { Meteor } from "meteor/meteor";
 import { useSnackbar } from "/contexts/snackbar-context";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginButton: FC = () => {
   const { isOpen, open, close } = useDisclosure(false);
@@ -33,13 +36,19 @@ const LoginButton: FC = () => {
         .required("Email is required"),
     }),
     onSubmit: (values) => {
-      authenticate(values.email).then((err: Meteor.Error) => {
-        if (err) openSnackbar("error", err.reason as string);
-        else openSnackbar("success", "Email sent");
-        formik.resetForm();
-        formik.setSubmitting(false);
-        close();
-      });
+      authenticate(values.email)
+        .then(() => {
+          openSnackbar("success", "Email sent");
+          formik.resetForm();
+          formik.setSubmitting(false);
+          close();
+        })
+        .catch((err: Meteor.Error) => {
+          openSnackbar("error", err.reason as string);
+          formik.resetForm();
+          formik.setSubmitting(false);
+          close();
+        });
     },
     validateOnChange: false,
     validateOnBlur: false,
@@ -89,6 +98,30 @@ const LoginButton: FC = () => {
   );
 };
 
+const MenuButton: FC = () => {
+  let navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const { anchorEl, open, close } = useDisclosureMenu();
+
+  const handleLogout = () => {
+    logout();
+    close();
+    navigate("/");
+  };
+
+  return (
+    <>
+      <Button onClick={open} color="inherit">
+        {user?.email}
+      </Button>
+
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={close}>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      </Menu>
+    </>
+  );
+};
+
 const Navbar: FC = () => {
   const { status, user } = useAuth();
 
@@ -96,12 +129,17 @@ const Navbar: FC = () => {
     <Box sx={{ flexGrow: 1, mb: "1rem" }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography
+            component={Link}
+            to="/"
+            color="inherit"
+            unselectable="on"
+            variant="h6"
+            sx={{ flexGrow: 1, textDecoration: "none" }}
+          >
             Task app
           </Typography>
-          {status === "authenticated" && (
-            <Typography component="div">{user?.email}</Typography>
-          )}
+          {status === "authenticated" && <MenuButton />}
 
           {status === "unauthenticated" && <LoginButton />}
         </Toolbar>
