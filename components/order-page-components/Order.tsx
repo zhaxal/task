@@ -18,6 +18,7 @@ import { useAuth } from "/contexts/auth-context";
 import RemoveOrderButton from "./RemoveOrderButton";
 import AcceptOrderButton from "./AcceptOrderButton";
 import DeclineOrderButton from "./DeclineOrderButton";
+import moment from "moment";
 
 const Order: FC = () => {
   let { orderId } = useParams();
@@ -55,6 +56,11 @@ const Order: FC = () => {
             <Typography variant="body1">
               Status: {order?.completedAt ? "completed" : "in progress"}
             </Typography>
+            {order?.completedAt && (
+              <Typography variant="body1">
+                Completed at: {moment(order?.completedAt).format("LLL")}
+              </Typography>
+            )}
             {executor && (
               <Typography variant="body1">
                 Executor: {executor?.email}

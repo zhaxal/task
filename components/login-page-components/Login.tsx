@@ -42,7 +42,6 @@ const Login: React.FC = () => {
 
   return (
     <Stack alignItems="center" justifyContent="center">
-      
       {token ? (
         <ResultPanel />
       ) : (

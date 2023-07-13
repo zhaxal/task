@@ -41,7 +41,7 @@ const RolePicker: FC = () => {
       <Typography variant="h5">Pick role</Typography>
       <Box sx={{ minWidth: 140 }}>
         <FormControl fullWidth>
-          <InputLabel>Age</InputLabel>
+          <InputLabel>Role</InputLabel>
           <Select value={role} label="Role" onChange={handleChange}>
             <MenuItem value="executor">Executor</MenuItem>
             <MenuItem value="customer">Customer</MenuItem>
