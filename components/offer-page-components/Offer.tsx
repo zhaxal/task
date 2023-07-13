@@ -7,6 +7,8 @@ import {
   OrdersCollection,
   UsersCollection,
 } from "/imports/api/collections";
+import moment from "moment";
+import PickButton from "./PickButton";
 
 const Offer: FC = () => {
   let { offerId } = useParams();
@@ -30,25 +32,44 @@ const Offer: FC = () => {
 
   return (
     <Container maxWidth="xl">
-      <Stack spacing={1}>
-        <Card>
-          <CardContent>
-            <Typography variant="h5">Executor</Typography>
-            <Typography variant="body1">{executor?.email}</Typography>
-          </CardContent>
-        </Card>
+      {order?.completedAt && (
+        <Stack spacing={1}>
+          <Card>
+            <CardContent>
+              <Typography variant="h5">
+                Order is completed at
+                {order.completedAt && `${moment(order.completedAt)}`}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Stack>
+      )}
 
-        <Card>
-          <CardContent>
-            <Typography variant="h5">
-              Order that needs to be complete
-            </Typography>
-            <Typography variant="body1">{order?.service}</Typography>
-            <Typography variant="body1">Price: {order?.price}</Typography>
-            <Typography variant="body1">Customer: {customer?.email}</Typography>
-          </CardContent>
-        </Card>
-      </Stack>
+      {!order?.completedAt && (
+        <Stack spacing={1}>
+          <Card>
+            <CardContent>
+              <Typography variant="h5">Executor</Typography>
+              <Typography variant="body1">{executor?.email}</Typography>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent>
+              <Typography variant="h5">
+                Order that needs to be complete
+              </Typography>
+              <Typography variant="body1">{order?.service}</Typography>
+              <Typography variant="body1">Price: {order?.price}</Typography>
+              <Typography variant="body1">
+                Customer: {customer?.email}
+              </Typography>
+            </CardContent>
+          </Card>
+
+          <PickButton executorId={executor?._id} orderId={order?._id} />
+        </Stack>
+      )}
     </Container>
   );
 };

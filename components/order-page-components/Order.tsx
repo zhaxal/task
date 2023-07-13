@@ -34,6 +34,10 @@ const Order: FC = () => {
     OffersCollection.find({ orderId: order?._id }).fetch()
   );
 
+  const executor = useTracker(() =>
+    UsersCollection.findOne({ _id: order?.completedBy })
+  );
+
   const isOwner = currentUser?._id === order?.userId;
 
   // find if current user has already made an offer
@@ -48,25 +52,34 @@ const Order: FC = () => {
             <Typography variant="h5">{order?.service}</Typography>
             <Typography variant="body1">Price: {order?.price}</Typography>
             <Typography variant="body1">Customer: {user?.email}</Typography>
+            <Typography variant="body1">
+              Status: {order?.completedAt ? "completed" : "in progress"}
+            </Typography>
+            {executor && (
+              <Typography variant="body1">
+                Executor: {executor?.email}
+              </Typography>
+            )}
           </CardContent>
         </Card>
 
         <Stack direction="row" spacing={1}>
-          {currentUser?.role === "customer" && isOwner && (
-            <RemoveOrderButton orderId={order?._id} />
-          )}
-          {currentUser?.role === "executor" && !hasOffer && (
-            <AcceptOrderButton orderId={order?._id} />
-          )}
+          {currentUser?.role === "customer" &&
+            isOwner &&
+            !order?.completedAt && <RemoveOrderButton orderId={order?._id} />}
+          {currentUser?.role === "executor" &&
+            !hasOffer &&
+            !order?.completedAt && <AcceptOrderButton orderId={order?._id} />}
 
-          {currentUser?.role === "executor" && hasOffer && (
-            <DeclineOrderButton orderId={order?._id} />
-          )}
+          {currentUser?.role === "executor" &&
+            hasOffer &&
+            !order?.completedAt && <DeclineOrderButton orderId={order?._id} />}
         </Stack>
 
         <Stack>
           {currentUser?.role === "customer" &&
             isOwner &&
+            !order?.completedAt &&
             offers.map((offer, i) => (
               <Card key={`offer-${i}`}>
                 <CardActionArea component={Link} to={`/offer/${offer._id}`}>

@@ -48,3 +48,27 @@ export const deleteOrder = async (
     throw new Meteor.Error("deleteOrder.failed", err.message);
   }
 };
+
+export const completeOrder = async (
+  orderId: string,
+  executorId: string,
+  role: Role
+) => {
+  try {
+    if (role !== "customer") {
+      throw new Meteor.Error(
+        "deleteOrder.notCustomer",
+        "Only customers can delete orders"
+      );
+    }
+
+    await OrdersCollection.updateAsync(
+      { _id: orderId },
+      { $set: { completedAt: new Date(), completedBy: executorId } }
+    );
+    await OffersCollection.removeAsync({ orderId });
+  } catch (error) {
+    const err = error as Error;
+    throw new Meteor.Error("deleteOrder.failed", err.message);
+  }
+};

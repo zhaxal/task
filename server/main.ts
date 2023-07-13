@@ -4,7 +4,7 @@ import { check } from "meteor/check";
 
 import { getUserWithAuthToken, updateUserRole } from "/functions/user";
 import { Role } from "/models/user";
-import { addOrder, deleteOrder } from "/functions/order";
+import { addOrder, completeOrder, deleteOrder } from "/functions/order";
 import {
   OffersCollection,
   OrdersCollection,
@@ -66,6 +66,13 @@ Meteor.startup(async () => {
       check(userId, String);
       check(role, String);
       return deleteOffer(orderId, userId, role as Role);
+    },
+
+    completeOrder(orderId, executorId, role) {
+      check(orderId, String);
+      check(executorId, String);
+      check(role, String);
+      return completeOrder(orderId, executorId, role as Role);
     },
   });
 });

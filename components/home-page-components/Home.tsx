@@ -1,4 +1,11 @@
-import { Box, Container, Grid } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Container,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { useSubscribe, useTracker } from "meteor/react-meteor-data";
 import React from "react";
 import { OrdersCollection } from "/imports/api/collections";
@@ -19,6 +26,15 @@ const Home: React.FC = () => {
 
       <Grid container spacing={1}>
         {isLoading() && <Spinner />}
+        {orders.length === 0 && !isLoading() && (
+          <Grid item xs={12}>
+            <Card>
+              <CardContent>
+                <Typography variant="h5">No orders yet</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
         {!isLoading() &&
           orders.map((order: Order, i) => (
             <Grid key={`order-${i}`} item md={2} xs={6}>
